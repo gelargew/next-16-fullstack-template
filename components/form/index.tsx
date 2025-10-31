@@ -7,6 +7,7 @@ import { Input as UIInput } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import {
+  Form as UIForm,
   FormField,
   FormItem,
   FormLabel as UIFormLabel,
@@ -15,28 +16,8 @@ import {
 } from "@/components/ui/form"
 import { cn } from "@/lib/utils"
 
-// Form wrapper component that extends FormField
-interface FormProps extends React.HTMLAttributes<HTMLDivElement> {
-  name: string
-}
-
-const FormWrapper = React.forwardRef<HTMLDivElement, FormProps>(
-  ({ name, className, children, ...props }, ref) => {
-    return (
-      <FormField name={name}>
-        {({ value, onChange, onBlur, error }) => (
-          <div ref={ref} className={className} {...props}>
-            {children}
-          </div>
-        )}
-      </FormField>
-    )
-  }
-)
-FormWrapper.displayName = "FormWrapper"
-
-// Create the compound Form component
-const Form = Object.assign(FormWrapper, {
+// Create the compound Form component by extending UIForm
+const Form = Object.assign(UIForm, {
   Input: FormInput,
   Textarea: FormTextarea,
   Select: FormSelect,
