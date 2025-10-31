@@ -13,6 +13,7 @@ import {
   IconHelp,
   IconInnerShadowTop,
   IconListDetails,
+  IconPackage,
   IconReport,
   IconSearch,
   IconSettings,
@@ -49,6 +50,11 @@ const data = {
       title: "Users",
       url: "/dashboard/users",
       icon: IconUsers,
+    },
+    {
+      title: "Products",
+      url: "/dashboard/products",
+      icon: IconPackage,
     },
     {
       title: "Analytics",

@@ -1,9 +1,11 @@
 // Import schemas from clean, feature-based files
 import * as authSchema from "./auth";
+import * as productsSchema from "./products";
 
 
 export const schema = {
   ...authSchema,
+  ...productsSchema,
 
 };
 
@@ -14,7 +16,8 @@ export const {
   session,
   account,
   verification,
-  // Core schemas
+  // Product schemas
+  product,
 } = schema;
 
 // Export types for better developer experience
@@ -28,6 +31,10 @@ export type {
   Verification,
   NewVerification,
 } from "./auth";
+export type {
+  Product,
+  NewProduct,
+} from "./products";
 
 // Export Zod schemas for validation
 export {
@@ -42,3 +49,9 @@ export {
   createUserSchema,
   updateUserSchema,
 } from "./auth";
+export {
+  productSelectSchema,
+  productInsertSchema,
+  createProductSchema,
+  updateProductSchema,
+} from "./products";
