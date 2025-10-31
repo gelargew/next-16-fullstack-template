@@ -2,6 +2,7 @@
 
 import { useQueryState, useQueryStates } from 'nuqs'
 import { parseAsBoolean, parseAsInteger, parseAsString } from 'nuqs'
+import { createQueryParamsSchema, sanitizeQueryParams } from '@/lib/schema-utils'
 
 // Base filter types
 export interface FilterDefinition {
@@ -145,33 +146,9 @@ export function useQueryFilters<T extends Record<string, any>>(
     }))
   }
 
-  // Get current filters as a clean object (for API calls)
+  // Get current filters as a clean object (for API calls) - using utility
   const getQueryParams = (): any => {
-    const params: any = {}
-
-    // Add filter values
-    Object.keys(config.filters).forEach(key => {
-      const value = filters[key]
-      const filterConfig = config.filters[key as keyof T]
-
-      // Skip 'all' values and empty values
-      if (value !== undefined && value !== '' && value !== 'all' && value !== null) {
-        // Convert string 'true'/'false' to boolean for boolean types
-        if (filterConfig.type === 'boolean' && typeof value === 'string') {
-          params[key] = value === 'true'
-        } else {
-          params[key] = value
-        }
-      }
-    })
-
-    // Add pagination and sorting
-    params.page = filters.page || 1
-    params.pageSize = filters.pageSize || (config.pagination?.defaultPageSize || 10)
-    params.sortField = filters.sortField || Object.keys(config.sorting)[0]
-    params.sortDirection = (filters.sortDirection as 'asc' | 'desc') || 'desc'
-
-    return params
+    return sanitizeQueryParams(filters as any, config)
   }
 
   // Check if any non-default filters are active

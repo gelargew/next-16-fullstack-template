@@ -54,6 +54,7 @@ export function UserEditDialog({ user, onUserUpdated, onOpenChange }: UserEditDi
 
     setIsSubmitting(true)
     try {
+      // Convert form data to FormData for server action
       const formData = new FormData()
       formData.append('name', data.name)
       formData.append('email', data.email)
@@ -62,6 +63,7 @@ export function UserEditDialog({ user, onUserUpdated, onOpenChange }: UserEditDi
         formData.append('emailVerified', user.emailVerified.toString())
       }
 
+      // Server action handles validation
       const result = await updateUser(user.id, formData)
 
       if (!result.success) {
@@ -73,6 +75,7 @@ export function UserEditDialog({ user, onUserUpdated, onOpenChange }: UserEditDi
       onUserUpdated()
     } catch (error) {
       console.error('Error updating user:', error)
+      // Could show toast error here
     } finally {
       setIsSubmitting(false)
     }

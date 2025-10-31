@@ -36,11 +36,13 @@ export function UserAddDialog({ onUserCreated, disabled = false }: UserAddDialog
   const handleSubmit = async (data: { name: string; email: string; image?: string }) => {
     setIsSubmitting(true)
     try {
+      // Convert form data to FormData for server action
       const formData = new FormData()
       formData.append('name', data.name)
       formData.append('email', data.email)
       if (data.image) formData.append('image', data.image)
 
+      // Server action handles validation
       const result = await createUser(formData)
 
       if (!result.success) {
@@ -52,6 +54,7 @@ export function UserAddDialog({ onUserCreated, disabled = false }: UserAddDialog
       onUserCreated()
     } catch (error) {
       console.error('Error creating user:', error)
+      // Could show toast error here
     } finally {
       setIsSubmitting(false)
     }

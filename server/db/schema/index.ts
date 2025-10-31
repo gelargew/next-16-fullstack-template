@@ -28,3 +28,17 @@ export type {
   Verification,
   NewVerification,
 } from "./auth";
+
+// Export Zod schemas for validation
+export {
+  userSelectSchema,
+  userInsertSchema,
+  sessionSelectSchema,
+  sessionInsertSchema,
+  accountSelectSchema,
+  accountInsertSchema,
+  verificationSelectSchema,
+  verificationInsertSchema,
+  createUserSchema,
+  updateUserSchema,
+} from "./auth";

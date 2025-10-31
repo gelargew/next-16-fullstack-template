@@ -1,8 +1,8 @@
 import type { FilterConfig } from '@/hooks/useQueryFilters'
 import type { User } from '@/server/db/schema/auth'
 
-// Define the filter interface for users
-export interface UserFilters {
+// Define the filter interface for users - auto-inferred from schema
+export type UserFilters = {
   search?: string
   emailVerified?: boolean
 }

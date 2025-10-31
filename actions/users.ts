@@ -2,7 +2,15 @@
 
 import { revalidatePath } from "next/cache"
 import { db } from "@/server/db/connection"
-import { user, type User } from "@/server/db/schema"
+import {
+  user,
+  type User,
+  createUserSchema,
+  updateUserSchema,
+  userSelectSchema
+} from "@/server/db/schema"
+import { createQueryParamsSchema } from "@/lib/schema-utils"
+import { usersFilterConfig } from "@/configs/usersFilters"
 import { eq, desc, like, or, and, sql } from "drizzle-orm"
 import { z } from "zod"
 import { redirect } from "next/navigation"
@@ -27,27 +35,19 @@ interface UsersResponse {
   }
 }
 
-// Validation schemas
-const createUserSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  email: z.string().email("Invalid email address"),
-  image: z.string().url("Invalid URL").optional().or(z.literal("")),
-})
-
-const updateUserSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  email: z.string().email("Invalid email address"),
-  image: z.string().url("Invalid URL").optional().or(z.literal("")),
-  emailVerified: z.boolean().optional(),
-})
+// Auto-generated query validation schema from filter config
+const usersQuerySchema = createQueryParamsSchema(usersFilterConfig)
 
 export async function createUser(formData: FormData) {
   try {
-    const { name, email, image } = createUserSchema.parse({
+    // Extract and validate form data using Drizzle Zod schema
+    const rawData = {
       name: formData.get('name'),
       email: formData.get('email'),
       image: formData.get('image'),
-    })
+    }
+
+    const { name, email, image } = createUserSchema.parse(rawData)
 
     // Check if user already exists
     const existingUser = await db
@@ -89,12 +89,15 @@ export async function createUser(formData: FormData) {
 
 export async function updateUser(userId: string, formData: FormData) {
   try {
-    const { name, email, image, emailVerified } = updateUserSchema.parse({
+    // Extract and validate form data using Drizzle Zod schema
+    const rawData = {
       name: formData.get('name'),
       email: formData.get('email'),
       image: formData.get('image'),
       emailVerified: formData.get('emailVerified') === 'true',
-    })
+    }
+
+    const { name, email, image, emailVerified } = updateUserSchema.parse(rawData)
 
     // Check if user exists
     const existingUser = await db
@@ -189,17 +192,11 @@ export async function deleteUser(userId: string) {
 
 export async function getUsers(params: UsersQueryParams = {}): Promise<UsersResponse> {
   try {
-    // Pagination parameters
-    const page = Math.max(1, params.page || 1)
-    const pageSize = Math.min(100, Math.max(1, params.pageSize || 10))
+    // Validate and parse query parameters using Drizzle Zod schema
+    const validatedParams = usersQuerySchema.parse(params) as any
+
+    const { page, pageSize, search, sortField, sortDirection, emailVerified } = validatedParams
     const offset = (page - 1) * pageSize
-
-    // Search parameters
-    const search = params.search || ''
-
-    // Sorting parameters
-    const sortField = params.sortField || 'createdAt'
-    const sortDirection = params.sortDirection || 'desc'
 
     // Build the query conditions
     const conditions = []
@@ -213,8 +210,8 @@ export async function getUsers(params: UsersQueryParams = {}): Promise<UsersResp
     }
 
     // Add emailVerified filter
-    if (params.emailVerified !== undefined) {
-      conditions.push(eq(user.emailVerified, params.emailVerified))
+    if (emailVerified !== undefined) {
+      conditions.push(eq(user.emailVerified, emailVerified))
     }
 
     // Add sorting
