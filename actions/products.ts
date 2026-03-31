@@ -275,12 +275,11 @@ export async function getProducts(params: ProductsQueryParams = {}): Promise<Pro
       .limit(pageSize)
       .offset(offset)
 
-    // Get total count
-    let totalCountQuery = db.select({ count: sql<number>`count(*)` }).from(product)
-
-    if (conditions.length > 0) {
-      totalCountQuery = totalCountQuery.where(and(...conditions))
-    }
+    // Get total count (single query — avoids Drizzle type mismatch on reassigned `.where()`)
+    const totalCountQuery = db
+      .select({ count: sql<number>`count(*)` })
+      .from(product)
+      .where(conditions.length > 0 ? and(...conditions) : undefined)
 
     const [productsData, totalCountResult] = await Promise.all([
       productsQuery,

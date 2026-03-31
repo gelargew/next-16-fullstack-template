@@ -230,7 +230,7 @@ export async function getUsers(params: UsersQueryParams = {}): Promise<UsersResp
       .offset(offset)
 
     // Get total count
-    let totalCountQuery = search
+    const totalCountQuery = search
       ? db.select({ count: sql<number>`count(*)` }).from(user)
           .where(
             or(

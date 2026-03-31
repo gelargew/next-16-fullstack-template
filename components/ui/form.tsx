@@ -98,7 +98,7 @@ function FormField<T extends FieldValues>({ name, children }: FormFieldProps<T>)
 }
 
 // Form Item wrapper
-interface FormItemProps extends React.HTMLAttributes<HTMLDivElement> {}
+type FormItemProps = React.HTMLAttributes<HTMLDivElement>
 
 function FormItem({ className, ...props }: FormItemProps) {
   const id = React.useId()
@@ -111,7 +111,7 @@ function FormItem({ className, ...props }: FormItemProps) {
 }
 
 // Form Label
-interface FormLabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {}
+type FormLabelProps = React.LabelHTMLAttributes<HTMLLabelElement>
 
 function FormLabel({ className, ...props }: FormLabelProps) {
   const { error, formItemId } = useFormField()
@@ -130,7 +130,7 @@ function FormLabel({ className, ...props }: FormLabelProps) {
 }
 
 // Form Control
-interface FormControlProps extends React.HTMLAttributes<HTMLDivElement> {}
+type FormControlProps = React.HTMLAttributes<HTMLDivElement>
 
 function FormControl({ ...props }: FormControlProps) {
   const { error, formItemId, formDescriptionId, formMessageId } = useFormField()
@@ -150,7 +150,7 @@ function FormControl({ ...props }: FormControlProps) {
 }
 
 // Form Description
-interface FormDescriptionProps extends React.HTMLAttributes<HTMLParagraphElement> {}
+type FormDescriptionProps = React.HTMLAttributes<HTMLParagraphElement>
 
 function FormDescription({ className, ...props }: FormDescriptionProps) {
   const { formDescriptionId } = useFormField()
@@ -165,7 +165,7 @@ function FormDescription({ className, ...props }: FormDescriptionProps) {
 }
 
 // Form Message
-interface FormMessageProps extends React.HTMLAttributes<HTMLParagraphElement> {}
+type FormMessageProps = React.HTMLAttributes<HTMLParagraphElement>
 
 function FormMessage({ className, children, ...props }: FormMessageProps) {
   const { error, formMessageId } = useFormField()

@@ -1,3 +1,5 @@
+// Keep ESLint on v9.x: v10 breaks `eslint-config-next` / typescript-eslint (FlatESLint) until
+// the toolchain explicitly supports it. Re-run `bun outdated` will show eslint 10 as "latest".
 import { defineConfig, globalIgnores } from "eslint/config";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";

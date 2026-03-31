@@ -31,6 +31,8 @@ interface FormInputProps {
   label?: string
   placeholder?: string
   type?: "text" | "email" | "password" | "number" | "tel" | "url"
+  /** For `type="number"` inputs (e.g. `"0.01"`) */
+  step?: string
   required?: boolean
   disabled?: boolean
   className?: string
@@ -42,6 +44,7 @@ function FormInput({
   label,
   placeholder,
   type = "text",
+  step,
   required,
   disabled,
   className,
@@ -67,6 +70,7 @@ function FormInput({
                 onChange={(e) => onChange(e.target.value)}
                 onBlur={onBlur}
                 placeholder={placeholder}
+                step={step}
                 disabled={disabled}
                 className={cn(
                   error && "border-destructive focus:border-destructive",
