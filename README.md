@@ -81,7 +81,7 @@ GOOGLE_CLIENT_SECRET="your-google-client-secret"
 
 ## Database Setup
 
-This project uses **PostgreSQL** with **Drizzle ORM**. The schema is located in `/server/db/schema/`.
+This project uses **PostgreSQL** with **Drizzle ORM**. The schema is located in `src/server/db/schema/`.
 
 ### Recommended Database: Neon
 

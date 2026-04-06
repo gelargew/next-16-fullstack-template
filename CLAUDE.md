@@ -36,13 +36,14 @@ This project follows a **schema-driven architecture** with the following princip
 5. **Zero Runtime Type Errors**: Compile-time and runtime type safety from single source
 
 ### 🏗️ Directory Structure
-- `app/` - Next.js App Router pages (no API routes for internal data)
-- `actions/` - Server actions for all data operations
-- `configs/` - Filter and feature configurations
-- `components/` - React components (UI, forms, feature-specific)
-- `server/` - Backend code (auth, database, schemas)
-- `lib/` - Shared utilities and validation helpers
-- `hooks/` - Custom React hooks for reusable logic
+All application code lives in `src/`. Config files remain at the project root.
+- `src/app/` - Next.js App Router pages (no API routes for internal data)
+- `src/actions/` - Server actions for all data operations
+- `src/configs/` - Filter and feature configurations
+- `src/components/` - React components (UI, forms, feature-specific)
+- `src/server/` - Backend code (auth, database, schemas)
+- `src/lib/` - Shared utilities and validation helpers
+- `src/hooks/` - Custom React hooks for reusable logic
 
 ### 🔧 Key Technologies
 - **Package Manager**: Bun
@@ -60,9 +61,9 @@ This project follows a **schema-driven architecture** with the following princip
 ### Database Setup
 - Uses PostgreSQL via Neon serverless
 - Database configuration in `drizzle.config.ts`
-- **Schemas** with auto-generated Zod validation in `server/db/schema/`
-- Database connection in `server/db/connection.ts`
-- Migrations output to `server/db/drizzle/`
+- **Schemas** with auto-generated Zod validation in `src/server/db/schema/`
+- Database connection in `src/server/db/connection.ts`
+- Migrations output to `src/server/db/drizzle/`
 - **Schema-driven validation** using Drizzle Zod
 
 #### Schema-Driven Validation
@@ -83,8 +84,8 @@ export const createUserSchema = userInsertSchema
 
 ### Authentication
 - Better Auth integrated with Next.js API routes
-- Auth configuration in `server/auth.ts`
-- API handler at `app/api/auth/[...all]/route.ts`
+- Auth configuration in `src/server/auth.ts`
+- API handler at `src/app/api/auth/[...all]/route.ts`
 - Uses Drizzle adapter for PostgreSQL
 - Email/password authentication enabled
 
@@ -178,8 +179,8 @@ The application uses a nested dashboard structure:
 - Site header with user profile integration
 
 ## Path Aliases
-- `@/*` maps to root directory for clean imports
-- Configuration in `tsconfig.json`
+- `@/*` maps to `src/` directory for clean imports
+- Configuration in `tsconfig.json` (`"@/*": ["./src/*"]`)
 
 ## State Management
 - Form state managed by React Hook Form with compound pattern
@@ -221,7 +222,7 @@ Required environment variables:
 
 Adding new features is now dramatically simpler. Here's the complete template:
 
-### 1. Define Database Schema (`server/db/schema/[feature].ts`)
+### 1. Define Database Schema (`src/server/db/schema/[feature].ts`)
 ```typescript
 import { pgTable, text, timestamp, boolean } from "drizzle-orm/pg-core"
 import { createSelectSchema, createInsertSchema } from "drizzle-zod"
@@ -253,7 +254,7 @@ export const createPostSchema = postInsertSchema
   })
 ```
 
-### 2. Create Filter Configuration (`configs/[feature]Filters.ts`)
+### 2. Create Filter Configuration (`src/configs/[feature]Filters.ts`)
 ```typescript
 import type { FilterConfig } from "@/hooks/useQueryFilters"
 import type { Post } from "@/server/db/schema"
@@ -294,7 +295,7 @@ export const postFilterConfig: FilterConfig<PostFilters> = {
 }
 ```
 
-### 3. Create Server Actions (`actions/[feature].ts`)
+### 3. Create Server Actions (`src/actions/[feature].ts`)
 ```typescript
 "use server"
 
@@ -351,7 +352,7 @@ export async function getPosts(params: any = {}) {
 }
 ```
 
-### 4. Create Page Component (`app/dashboard/[feature]/page.tsx`)
+### 4. Create Page Component (`src/app/dashboard/[feature]/page.tsx`)
 ```typescript
 "use client"
 
@@ -414,7 +415,7 @@ export default function PostsPage() {
 }
 ```
 
-### 5. Update Navigation (`components/app-sidebar.tsx`)
+### 5. Update Navigation (`src/components/app-sidebar.tsx`)
 ```typescript
 // Add to navMain array:
 {
@@ -424,7 +425,7 @@ export default function PostsPage() {
 },
 ```
 
-### 6. Export Schemas (`server/db/schema/index.ts`)
+### 6. Export Schemas (`src/server/db/schema/index.ts`)
 ```typescript
 // Add to existing exports:
 export {
